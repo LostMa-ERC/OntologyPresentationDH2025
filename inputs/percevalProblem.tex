@@ -1,0 +1,27 @@
+\tikzstyle{n} = [circle, minimum width=1.5cm, text width=2cm, text centered, draw=black, fill=gray!10]
+\tikzstyle{p} = [rectangle, rounded corners=0.25cm, minimum width=1.5cm, text width=2.25cm, text centered, draw=black, fill=gray!30]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{tikzpicture}[-,shorten >=1pt,auto,node distance=0.5cm,semithick]
+
+    \node (text1) [n]
+        {Story v.1};%, \\ Chrétien de Troyes \\ (1182-1190)}
+    \node (text2) [n, right = of text1, xshift=3cm]
+        {Story v.2};%, \\ Wolfram von Eschenbach \\ (1200-1210)}.
+
+    % \draw[<->, dash dot] (story) -- (text1);
+    % \draw[<->, dash dot] (story) -- (text2);
+
+    \path[<->, dash dot]
+        (text2) edge[bend left=0] (text1);
+
+    \node (conte) [p, below = of text1, xshift=-0.5cm] {\textit{Le conte du graal}};
+    \node (troyes) [p, below = of conte] {Chrétien de Troyes};
+    \node (fro) [p, below = of troyes] {Old French};
+
+    \node (parzival) [p, below = of text2, xshift=0.5cm] {\textit{Parzival}};
+    \node (wolfram) [p, below = of parzival] {Wolfram von Eschenbach};
+    \node (gmh) [p, below = of wolfram] {Middle High German};
+
+\end{tikzpicture}

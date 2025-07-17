@@ -1,0 +1,138 @@
+
+\tikzstyle{o} = [circle, minimum width=1.25cm, text width=1.25cm, text centered, draw=black, fill=yellow!30]
+\tikzstyle{c} = [circle, minimum width=1cm, text width=1cm, text centered, draw=black,
+pattern={north east lines},pattern color=gray!50
+]
+\tikzstyle{n} = [circle, minimum width=1.25cm, text width=1.25cm, text centered, draw=black, fill=yellow!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{tikzpicture}[-,shorten >=1pt,auto,node distance=0.15cm,semithick]
+
+    \tiny
+
+    \node (entity) [o]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E1_CRM_Entity}{crm:E1} \textbf{CRM Entity}};
+
+    \node (place) [n, above = of entity, xshift=1.25cm, yshift=0.5cm]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E53_Place}{crm:E53} \textbf{Place}};
+
+    \node (spacetimeVolume) [c, below = of entity, xshift=1.25cm]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E92_Spacetime_Volume}{crm:E92}};
+    \node (physicalThing) [o, below = of spacetimeVolume, xshift=1.25cm]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E18_Physical_Thing}{crm:E18} \textbf{Physical Thing}};
+    \node (physicalObject) [o, below = of physicalThing, xshift=-1.25cm]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E19_Physical_Object}{crm:E19} \textbf{Physical Object}};
+    \node (manMadeObject) [n, below = of physicalObject]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E22_Human-Made_Object}{crm:E22} \textbf{Human-Made Object}};
+
+    \node (persistentItem) [c, right = of entity, xshift=0.5cm]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E77_Persistent_Item}{crm:E77}};
+    \node (thing) [o, right = of persistentItem]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E70_Thing}{crm:E70} \textbf{Thing}};
+    \node (manMadeThing) [c, right = of thing]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E71_Human-Made_Thing}{crm:E71}};
+    \node (conceptualObject) [n, right = of manMadeThing]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E28_Conceptual_Object}{crm:E28} \textbf{Conceptual Object}};
+
+    \node (propositionalObject) [o, right = of conceptualObject]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E89_Propositional_Object}{crm:E89} \textbf{Propositional Object}};
+    \node (work) [n, right = of propositionalObject, yshift=1.25cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/F1_Work}{lrmoo:F1} \textbf{Work}};
+
+    \node (informationObject) [o, right = of propositionalObject, yshift=-1.25cm]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E73_Information_Object}{cmr:E73} \textbf{Information Object}};
+    \node (expression) [n, below = of informationObject, xshift=-1.7cm, yshift=-1cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/F2_Expression}{lrmoo:F2} \textbf{Expression}};
+    \node (manifestation) [n, below = of informationObject, yshift=-3cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/F3_Manifestation}{lrmoo:F3} \textbf{Manifestation}};
+
+    \node (physicalManMadeThing) [o, below = of physicalThing, xshift=1.25cm]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E24_Physical_Human-Made_Thing}{crm:E24} \textbf{Physical Human-Made Thing}};
+    \node (item) [n, below = of physicalManMadeThing]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/F5_Item}{lrmoo:F5} \textbf{Item}};
+
+    \draw (manMadeThing) -- (conceptualObject);
+    \draw (manMadeThing) -- (physicalManMadeThing);
+    \draw (physicalManMadeThing) -- (manMadeObject);
+    \draw (conceptualObject) -- (propositionalObject);
+    \draw (propositionalObject) -- (informationObject);
+    \draw (propositionalObject) -- (work);
+    \draw (informationObject) -- (manifestation);
+    \draw (informationObject) -- (expression);
+    \draw (physicalManMadeThing) -- (item);
+    \draw (manMadeThing) -- (thing);
+    \draw (thing) -- (persistentItem);
+    \draw (entity) -- (persistentItem);
+
+    \draw (entity) -- (place);
+
+    \draw (entity) -- (spacetimeVolume);
+    \draw (spacetimeVolume) -- (physicalThing);
+    \draw (physicalThing) -- (physicalManMadeThing);
+    \draw (physicalThing) -- (physicalObject);
+    \draw (physicalObject) -- (manMadeObject);
+
+    \draw[-, dash dot]
+        (place) edge[bend right=20]
+        node[left, yshift=-0.5cm]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/P55_has_current_location}{crm:P55}}
+        node[left, yshift=-0.7cm]
+        {CurrentlyHolds}
+        (physicalObject)
+        ;
+
+    \draw[->, dash dot]
+        (physicalThing.30) arc (-60:170:4mm)
+        node[above, xshift=0.4cm, yshift=0.4cm]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/P46i_forms_part_of}{crm:P46}}
+        node [above, xshift=0.4cm, yshift=0.6cm] {FormsPartOf}
+        ;
+
+    \draw[->, dash dot]
+        (work.30) arc (-60:170:4mm)
+        node[below, xshift=0.5cm, yshift=0.9cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/R2_is_derivative_of}{lrmoo:R2}}
+        node [below, xshift=0.75cm, yshift=0.7cm]
+        {IsDerivativeOf}
+        ;
+
+    \draw[-, dash dot]
+        (work) edge[bend right=30]
+        node[above, yshift=0.3cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/R10_is_member_of}{lrmoo:R10}}
+        node[above, yshift=0.1cm]
+        {IsMemberOf}
+        (conceptualObject);
+
+    \draw[-, dash dot]
+        (work) edge[bend left=60]
+        node[right]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/R3_is_realised_in}{lrmoo:R3}}
+        node[right, yshift=-0.2cm]{Realises}
+        (expression);
+
+    \draw[->, dash dot]
+        (expression.-45) arc (60:-190:4mm)
+        node[left, yshift=-0.2cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/R76_is_derivative_of}{lrmoo:R76}}
+        node [left, yshift=-0.4cm]
+        {IsDerivativeOf}
+        ;
+
+    \draw[-, dash dot]
+        (expression) edge[bend left=30] node[right, yshift=0.2cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/R4i_is_embodied_in}{lrmoo:R4}}
+        node[right] {Embodies}
+        (manifestation);
+
+    \draw[-, dash dot]
+        (manifestation) edge[bend left=30]
+        node[right, xshift=-0.2cm, yshift=-0.2cm]
+            {
+            \href{http://iflastandards.info/ns/lrm/lrmoo/R7i_is_exemplified_by}
+            {lrmoo:R7}}
+        node[right, xshift=-0.2cm, yshift=-0.4cm]
+            {Exemplifies}
+        (item);
+
+\end{tikzpicture}

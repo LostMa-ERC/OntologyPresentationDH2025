@@ -1,0 +1,95 @@
+\tikzstyle{n} = [circle, minimum width=1.5cm, text width=1.5cm, text centered, draw=black, fill=yellow!30]
+\tikzstyle{p} = [circle, minimum width=1.5cm, text width=1.5cm, text centered, draw=black, fill=yellow!80]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{tikzpicture}[-,shorten >=1pt,auto,node distance=0.15cm,semithick]
+
+    \scriptsize
+
+    \node (storyverse) [n]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E28_Conceptual_Object}{crm:E28} \textbf{Storyverse}};
+
+    \node (story) [n, right = of storyverse]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/F1_Work}{lrmoo:F1} \textbf{Story}};
+
+    \node (text) [n, right = of story]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/F2_Expression}{lrmoo:F2} \textbf{Text}};
+
+    \node (witness) [n, right = of text]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/F3_Manifestation}{lrmoo:F3} \textbf{Witness}};
+
+    \node (part) [n, right = of witness]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/F5_Item}{lrmoo:F5} \textbf{Part}};
+
+    \node (document) [p, below = of part, yshift=-1cm]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E22_Human-Made_Object}{crm:E22} \textbf{Document}};
+
+    \node (repository) [p, left = of document]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/E53_Place}{crm:E53} \textbf{Repository}};
+
+    \draw[->, line width=1pt]
+        (document) edge[bend left=90]
+        node[below]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/P55_has_current_location}{crm:P55}}
+        node[below, yshift=-0.4cm]
+        {HasCurrentLocation}
+        (repository)
+        ;
+
+    \draw[->, line width=1pt]
+        (part) edge [bend left=0]
+        node[right, yshift=0.2cm]
+        {\href{http://www.cidoc-crm.org/cidoc-crm/P46i_forms_part_of}{crm:P46}}
+        node [right, yshift=-0.2cm] {FormsPartOf}
+        (document)
+        ;
+
+    \draw[->, line width=1.5pt]
+        (story.-45) arc (60:-190:4mm)
+        node[below, yshift=-0.5cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/R2_is_derivative_of}{lrmoo:\textbf{R2}}}
+        node [below, yshift=-0.9cm]
+        {IsDerivativeOf}
+        ;
+
+    \path[->, line width=1.5pt]
+        (story.north) edge[bend right=90]
+        node[above, yshift=0.4cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/R10_is_member_of}{lrmoo:\textbf{R10}}}
+        node[above]
+        {IsMemberOf}
+        (storyverse.north);
+
+    \path[<-, line width=1.5pt]
+        (story.80) edge[bend left=90]
+        node[above, yshift=0.4cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/R3_is_realised_in}{lrmoo:\textbf{R3}}}
+        node[above]{Realises}
+        (text.north);
+
+    \draw[->, line width=1.5pt]
+        (text.-45) arc (60:-190:4mm)
+        node[below, yshift=-0.5cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/R76_is_derivative_of}{lrmoo:\textbf{R76}}}
+        node [below, yshift=-0.9cm]
+        {IsDerivativeOf}
+        ;
+
+    \path[<-, line width=1.5pt]
+        (text.80) edge[bend left=90] node[above, yshift=0.4cm]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/R4i_is_embodied_in}{lrmoo:\textbf{R4}}}
+        node[above] {Embodies}
+        (witness.north);
+
+    \path[->, line width=1.5pt]
+        (witness.north) edge[bend left=90]
+        node[above, yshift=0.4cm]
+            {
+            \href{http://iflastandards.info/ns/lrm/lrmoo/R7i_is_exemplified_by}
+            {lrmoo:\textbf{R7}}}
+        node[above]
+            {IsExemplifiedBy}
+        (part.north);
+
+\end{tikzpicture}

@@ -1,0 +1,403 @@
+% !TeX spellcheck = en
+\documentclass[xcolor=table]{beamer}
+
+\usepackage[french,english]{babel}
+%\usepackage{fontspec}
+
+%\setmainfont{Junicode}
+
+%\usetheme{CambridgeUS}
+\usepackage{hyperref}
+
+
+%Appendix frames not counted towards total frames
+\usepackage{appendixnumberbeamer}
+%%%%/!\
+% USEFUL BEAMER HELP
+%https://www.cpt.univ-mrs.fr/~masson/latex/Beamer-appearance-cheat-sheet.pdf
+\setbeamersize{description width=0.47cm}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{footline}[frame number]{}
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage{graphicx}
+\usepackage{multirow}
+
+
+%\usepackage{minted}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+
+\usepackage{subcaption}
+\usepackage{eso-pic}
+
+
+
+
+%\AtBeginSection[]
+%{
+%\begin{frame}<beamer>{Outline}
+%\tableofcontents[currentsection,hideothersubsections, sectionstyle=show/shaded]
+%\end{frame}
+%}
+
+%\AtBeginSubsection[]{%
+%\begin{frame}{Plan}%
+%\small
+%\tableofcontents[currentsection,currentsubsection]%
+%\end{frame} }
+
+
+\usetheme{metropolis}
+
+% Metadata
+\title{Greening your database of literary corpora}
+\subtitle{How to avoid reinventing vocabularies,
+  in favor of sustainable, reusable data models}
+\author{Jean-Baptiste Camps \and Kelly Christensen}
+\institute{École nationale des chartes, PSL}
+\date{DH 2025\\Lisbon, 17th July 2025, \textit{Session SP-31}}
+
+
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usetikzlibrary{patterns,patterns.meta}
+\usetikzlibrary{positioning}
+\usepackage{multirow}
+\usepackage{minted}
+\usepackage{adjustbox}
+\usepackage{tabularray}
+
+\usepackage{subcaption}
+
+% Citation packages
+\usepackage[autostyle]{csquotes}
+\usepackage[
+    backend=biber,
+    % style=numeric-comp,
+    natbib=true,
+    url=false,
+    doi=true,
+    eprint=false
+]{biblatex}
+\addbibresource{inputs/bib.bib}
+\nocite{*}
+\usepackage{tablefootnote}
+
+\usepackage{acro}
+\acsetup{make-links}
+
+% Acronyms
+\DeclareAcronym{cidoc}{
+	short=CIDOC,
+	long=Comité International pour la DOCumentation
+}
+
+\DeclareAcronym{crm}{
+  short=CRM,
+  long=Conceptual Reference Model
+}
+\DeclareAcronym{frbr}{
+  short=FRBR,
+  long=Functional Requirements for Bibliographic Records
+}
+
+\DeclareAcronym{frbroo}{
+  short=FRBR\textsubscript{OO},
+  long=Functional Requirements for Bibliographic Records Object-Oriented
+}
+
+\DeclareAcronym{lrm}{
+  short=LRM,
+  long=Library Reference Model
+}
+\DeclareAcronym{lrmoo}{
+  short=LRM\textsubscript{OO},
+  long=Library Reference Model Object-Oriented
+}
+\DeclareAcronym{ifla}{
+  short=IFLA,
+  long=International Federation of Library Associations
+}
+\DeclareAcronym{wemi}{
+  short=WEMI,
+  long=Work-Expression-Manifestation-Item
+}
+
+\DeclareAcronym{htr}{
+  short=HTR,
+  long=Handwritten Text Recognition
+}
+
+\DeclareAcronym{tei}{
+  short=TEI,
+  long=Text Encoding Initiative
+}
+
+\DeclareAcronym{fair}{
+  short=FAIR,
+  long={Findable, Accessible, Interoperable, Reusable}
+}
+
+\DeclareAcronym{dts}{
+  short=DTS,
+  long=Distributed Text Services
+}
+
+\DeclareAcronym{iiif}{
+  short=IIIF,
+  long=International Image Interoperability Framework
+}
+
+\DeclareAcronym{ci}{
+  short=CI,
+  long=Continuous Integration
+}
+
+\DeclareAcronym{pypi}{
+  short=PyPI,
+  long=Python Package Index
+}
+
+\DeclareAcronym{sdh}{
+    short=SDH,
+    long=CRM Semantic Data for Humanities and Social Sciences
+}
+
+\DeclareAcronym{dcmi}{
+  short=DC,
+  long=Dublin Core
+}
+
+
+\AtBeginSection[]
+{
+\begin{frame}<beamer>{Outline}
+\tableofcontents[currentsection,hideothersubsections, sectionstyle=show/shaded]
+\end{frame}
+}
+
+\setbeamercolor{background canvas}{bg=white}
+
+\begin{document}
+
+\begin{frame}
+    \AddToShipoutPictureFG*{
+    \AtPageUpperLeft{\put(0,-15){\makebox[0.98\paperwidth][r]{slides: \href{https://enc.hal.science/hal-05059049}{enc.hal.science/hal-05059049}}}}
+}
+
+	\maketitle
+
+	\begin{center}
+		\vspace*{-3cm}
+		\centering
+		\includegraphics[width=0.37\textwidth]{img/logo-enc.png} \hfill
+	    \includegraphics[width=0.15\textwidth]{img/logo_lostma.png} \hfill
+	    \includegraphics[width=0.3\textwidth]{img/logo-erc.png}
+	\end{center}
+
+\end{frame}
+
+\begin{frame}{Context: LostMa project}
+\AddToShipoutPictureFG*{
+    \AtPageUpperLeft{\put(0,-40){\makebox[0.98\paperwidth][r]{slides: \href{https://enc.hal.science/hal-05059049}{enc.hal.science/hal-05059049}}}}
+}
+\vspace{1em}
+\begin{itemize}
+    \item Project: \texttt{LostMa}
+    \begin{itemize}
+        \item European Research Council
+        \item 5 years (all good things come to an end)
+    \end{itemize}
+    \item Goal
+        \begin{itemize}
+            \item Model the transmission of Medieval stories, texts and manuscripts (and estimate survival rate)
+            %\item Train \& evaluate model with variables: narrative content, genre, language, materiality
+        \end{itemize}
+    \item Problem
+        \begin{itemize}
+            \item Group manuscripts (easy to distinguish, libraries do this all the time) by narrative content (more abstract, less standardised)
+        \end{itemize}
+    \item Challenge
+        \begin{itemize}
+            \item Minimize original ontology. Rely on existing frameworks and digital resources.
+            \begin{itemize}
+                \item \ac{fair}
+            \end{itemize}
+        \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Problem: Modelling narrative traditions}
+What data model makes versions of a story findable (groups them) but also reuses the main bibliographic ontologies?
+
+    \begin{adjustbox}{max totalsize={\textwidth}{0.9\textheight},center}
+	\input{inputs/percevalProblem.tex}
+	\end{adjustbox}
+\end{frame}
+
+\begin{frame}{Challenge: Reusability and (project) resource management}
+    \textit{FAIR Guiding Principles for scientific data management and stewardship} (2016)
+    \begin{center}
+    \begin{tabular}{|c|c|c|c|} \hline
+        F & A & I & R \\
+        Findable & Accessible & Interoperable & Reusable \\
+        \hline
+    \end{tabular}
+    \end{center}
+    \begin{itemize}
+        \item Greener digital data storage and distribution\footfullcite{Ficher2021}
+        \item Minimal single-use documentation
+        \item Efficient integration in other projects
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Methodology: Models for F.A.I.R. literary projects}
+    The big groups:
+        \begin{itemize}
+            \item \acf{cidoc}
+            \item \acf{ifla}
+            \item \acf{dcmi}
+        \end{itemize}
+    The main ontologies:
+    \begin{table}
+    \centering \footnotesize
+        \begin{tabular}{|c|c|c|p{0.6\textwidth}|}
+            \hline
+            \cellcolor{gray!50}\textbf{Org.}
+                & \cellcolor{gray!50}\textbf{Year}
+                & \cellcolor{gray!50}\textbf{Ver.}
+                & \cellcolor{gray!50}\textbf{Model}
+                \\ \hline \hline
+            \ac{ifla} & 1998 & 1.0 & \ac{frbr}
+                \\ \hline
+            \cellcolor{gray!10}\ac{cidoc}
+                & \cellcolor{gray!10}2006
+                & \cellcolor{gray!10}1.0
+                & \cellcolor{gray!10}\ac{crm}
+                \\ \hline
+            \ac{ifla} & 2016 & 2.4 & \ac{frbroo}
+                \\ \hline
+            \cellcolor{gray!10} \ac{ifla}
+                & \cellcolor{gray!10}2017
+                & \cellcolor{gray!10}1.0
+                & \cellcolor{gray!10}\ac{lrm}
+                \\ \hline
+            \ac{cidoc} & 2022 & 7.1.12 & \ac{crm}
+                \\ \hline
+            \cellcolor{yellow!30}\ac{ifla}
+                & \cellcolor{yellow!30}2024
+                & \cellcolor{yellow!30}1.0
+                & \cellcolor{yellow!30}\ac{lrmoo}
+                \\ \hline
+        \end{tabular}
+    \caption{Version release dates of international standards}
+    \end{table}
+\end{frame}
+
+\begin{frame}{\acf{lrmoo}, built atop the \ac{crm}}
+    \begin{adjustbox}{max totalsize={\textwidth}{0.9\textheight},center}
+	\input{inputs/ontologyTree.tex}
+	\end{adjustbox}
+\end{frame}
+
+\begin{frame}{LostMa Ontology, built atop the \ac{lrmoo}}
+    \begin{adjustbox}{max totalsize={\textwidth}{0.9\textheight},center}
+	\input{inputs/LostMaOntologyTree.tex}
+	\end{adjustbox}
+\end{frame}
+
+\begin{frame}{LostMa Ontology, simplified}
+    \begin{adjustbox}{max totalsize={\textwidth}{0.9\textheight},center}
+	\input{inputs/lostmaSimplified.tex}
+	\end{adjustbox}
+\end{frame}
+
+\begin{frame}{Solution: Perceval example (revisited)}
+    \begin{adjustbox}{max totalsize={\textwidth}{0.9\textheight},center}
+	\input{inputs/percevalStory.tex}
+	\end{adjustbox}
+\end{frame}
+
+\begin{frame}[containsverbatim]{Solution: Multi-use documentation (text)}
+Namespaces:
+    \texttt{\href{http://iflastandards.info/ns/lrm/lrmoo}{lrmoo}} (IFLA),
+    \texttt{\href{http://purl.org/dc/terms/1.1}{dcterms}} (DCMI),
+    \texttt{\href{http://purl.org/dc/elements/1.1}{dc}} (DCMI)
+\begin{minted}{xml}
+<lrmoo:F2_Expression id="48572">
+ <dcterms:title>Perceval</dcterms:title>
+ <dcterms:language>fro</dcterms:language>
+ <dcterms:created>1196-01-01/1210-12-31</dcterms:created>
+ <dc:date>Vers 1200</dc:date>
+ <lrmoo:R4_is_embodied_in>
+  <lrmoo:F3_Manifestation id="54725">
+   <!-- Witness metadata -->
+ </lrmoo:R4_is_embodied_in>
+</lrmoo:F2_Expression>
+\end{minted}
+\end{frame}
+
+\begin{frame}[containsverbatim]{Solution: Multi-use documentation (witness)}
+Namespaces:
+  \texttt{\href{http://iflastandards.info/ns/lrm/lrmoo}{lrmoo}} (IFLA),
+    \texttt{\href{http://purl.org/dc/terms/1.1}{dcterms}} (DCMI),
+    \texttt{\href{http://www.cidoc-crm.org/cidoc-crm}{crm}} (CIDOC),
+    \texttt{\href{http://purl.org/ontology/bibo}{bibo}} (DCMI)
+\scriptsize
+\begin{minted}{xml}
+<lrmoo:F3_Manifestation id="54725">
+ <dcterms:created>1301-01-01/1400-12-31</dcterms:created>
+ <lrmoo:R7_is_exemplified_by>
+  <lrmoo:F5_Item id="53068">
+   <bibo:locator>
+    <bibo:pages>
+     <bibo:pageStart>96r</bibo:pageStart>
+     <bibo:pageEnd>126v</bibo:pageEnd>
+    </bibo:pages>
+   </bibo:locator>
+   <crm:P46i_forms_part_of>
+    <crm:E22_Human-Made_Object id="46077"/>
+     <!-- Document metadata -->
+   </crm:P46i_forms_part_of>
+  </lrmoo:F5_Item>
+ </lrmoo:R7_is_exemplified_by>
+</lrmoo:F3_Manifestation>
+\end{minted}
+\end{frame}
+
+\begin{frame}{Conclusion}
+
+\AddToShipoutPictureFG*{
+    \AtPageUpperLeft{\put(0,-40){\makebox[0.98\paperwidth][r]{slides: \href{https://enc.hal.science/hal-05059049}{enc.hal.science/hal-05059049}}}}
+}
+
+\vspace{1em}
+\begin{block}{In progress}
+    \begin{itemize}
+        \item Off-load documentation of our data model to existent digital resources by linking our ontology to others' documentation
+        \begin{itemize}
+            \item Side goal: save on resources for maintaining online documentation (esp. after project ends)
+        \end{itemize}
+        \item Map more properties to our core (\ac{lrmoo}, \ac{crm}) entities
+    \end{itemize}
+\end{block}
+\begin{block}{Future work}
+    \begin{itemize}
+        \item Accommodate more uncertainty in values, i.e. dates:
+        \begin{itemize}
+            \item earliest possible date
+            \item estimated earliest date
+            \item estimated latest date
+            \item latest possible date
+        \end{itemize}
+        \item Accommodate source citation on properties
+    \end{itemize}
+\end{block}
+\end{frame}
+
+
+\end{document}

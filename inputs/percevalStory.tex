@@ -1,0 +1,84 @@
+\tikzstyle{n} = [circle, minimum width=1.5cm, text width=2cm, text centered, draw=black, fill=gray!10]
+\tikzstyle{p} = [rectangle, rounded corners=0.25cm, minimum width=1.5cm, text width=2.25cm, text centered, draw=black, fill=gray!30]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{tikzpicture}[-,shorten >=1pt,auto,node distance=0.5cm,semithick]
+
+    \node (story) [n] {Story};
+
+    \node (perceval) [p, right = of story, xshift=1.5cm] {Perceval};
+    \draw[->] (story) --
+    node [above]{\href{http://purl.org/dc/terms/title}{dcterms:title}}
+    (perceval);
+
+    \node (text1) [n, left = of story, yshift=-2.5cm, xshift=-1cm]
+        {Text 1};%, \\ Chrétien de Troyes \\ (1182-1190)}
+    \node (text2) [n, right = of story, yshift=-2.5cm, xshift=1cm]
+        {Text 2};%, \\ Wolfram von Eschenbach \\ (1200-1210)}.
+
+    \draw[->, line width=2pt] (story) --
+        node[above, xshift=-0.6cm]
+            {\href{http://iflastandards.info/ns/lrm/lrmoo/R3_is_realised_in}{lrmoo:R3}}
+        (text1);
+    \draw[->, line width=2pt] (story) --
+        node[above, xshift=1.3cm]{
+            \href{http://iflastandards.info/ns/lrm/lrmoo/R3_is_realised_in}{lrmoo:R3}
+            \footnotesize{IsRealisedIn}
+        }
+        (text2);
+
+    \path[->, line width=2pt]
+        (text2) edge[bend left=0]
+        node[above]
+        {\href{http://iflastandards.info/ns/lrm/lrmoo/R76_is_derivative_of}{lrmoo:R76}}
+        node[below]{\footnotesize{IsDerivativeOf}}
+        (text1);
+
+    \node (conte) [p, below = of text1, yshift=-0.25cm, xshift=-0.5cm] {\textit{Le conte du graal}};
+    \node (troyes) [p, below = of conte] {Chrétien de Troyes};
+    \node (fro) [p, below = of troyes] {Old French};
+
+    \node (parzival) [p, below = of text2, yshift=-0.25cm, xshift=0.5cm] {\textit{Parzival}};
+    \node (wolfram) [p, below = of parzival] {Wolfram von Eschenbach};
+    \node (gmh) [p, below = of wolfram] {Middle High German};
+
+    \path[->]
+        (text1) edge[bend left=0]
+        node [right]
+        {\href{http://purl.org/dc/terms/title}
+        {dcterms:title}}
+        (conte);
+    \path[->]
+        (text1.east) edge[bend left=45]
+        node [right, text width=1cm]
+        {\href{http://purl.org/dc/terms/language}
+        {dcterms:language}}
+        (fro.east);
+    \path[->]
+        (text1.west) edge[bend right=60]
+        node [left, yshift=1cm, xshift=1.75cm]
+        {\href{http://purl.org/dc/terms/creator}
+        {dcterms:creator}}
+        (troyes.west);
+
+    \path[->]
+        (text2) edge[bend right=0]
+        node [right]
+        {\href{http://purl.org/dc/terms/title}
+        {dcterms:title}}
+        (parzival);
+    \path[->]
+        (text2.east) edge[bend left=45]
+        node [below, xshift=0.4cm]
+        {\href{http://purl.org/dc/terms/language}
+        {dcterms:language}}
+        (gmh.east);
+    \path[->]
+        (text2.west) edge[bend right=60]
+        node [left, xshift=1cm]
+        {\href{http://purl.org/dc/terms/creator}
+        {dcterms:creator}}
+        (wolfram.west);
+
+\end{tikzpicture}
